@@ -11,6 +11,7 @@
 
 // Clearing the shell using escape sequences 
 #define clear() printf("\033[H\033[J") 
+  
   void simplesh() 
 {   clear(); 
     printf("\n\n\n”); 
