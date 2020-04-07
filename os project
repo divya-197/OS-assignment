@@ -15,7 +15,7 @@
   void simplesh() 
 {   clear(); 
     printf("\n\n\n”); 
-    printf("\n\n\n\t   SIMPLESH.c"); 
+    printf("\n\n\n\t SIMPLESH.c"); 
     printf("\n\n\n"); 
     char* username = getenv("user"); 
     printf("\n\n\n user is: @%s", username); 
