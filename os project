@@ -1,0 +1,136 @@
+#include<stdio.h> 
+#include<string.h> 
+#include<stdlib.h> 
+#include<unistd.h> 
+#include<sys/types.h> 
+#include<sys/wait.h> 
+#include<readline/readline.h> 
+#include<readline/history.h> 
+#define MAXCOM 1000 
+#define MAXLIST 100
+
+// Clearing the shell using escape sequences 
+#define clear() printf("\033[H\033[J") 
+  void simplesh() 
+{   clear(); 
+    printf("\n\n\n”); 
+    printf("\n\n\n\t   SIMPLESH.c"); 
+    printf("\n\n\n"); 
+    char* username = getenv("user"); 
+    printf("\n\n\n user is: @%s", username); 
+    printf("\n"); 
+    sleep(1); 
+    clear();} 
+// Function to take input 
+int Input(char* str) 
+{  char* buf; 
+  buf = readline("\n>>> "); 
+ if (strlen(buf) != 0) 
+{ 
+ add_history(buf); 
+strcpy(str, buf); 
+ return 0; 
+    }
+else { 
+return 1; 
+  } 
+} 
+  
+// Function to print Current Directory. 
+void printDirectory() 
+{ 
+    char pwd[1024]; 
+    getcwd(pwd, sizeof(pwd)); 
+    printf("\nDir: %s", pwd); 
+} 
+  
+// Function where the system command is executed 
+void execute(char** parsed) 
+{     pid_t pid = fork();  
+ if (pid == -1) 
+{ printf("\nFailed forking child.."); 
+        return; 
+    } 
+	else if (pid == 0) { 
+        if (execvp(parsed[0], parsed) < 0) { 
+            printf("\nCould not execute command.."); 
+        } 
+        exit(0); 
+    }
+ else { 
+        // waiting for child to terminate 
+        wait(NULL);  
+        return; 
+    } 
+} 
+
+// Function to execute builtin commands 
+int builtincmd(char** parsed) 
+{ 
+    int NoOfOwnCmds = 6, i, a = 0; 
+    char* Cmds[NoOfOwnCmds]; 
+    char* username; 
+  
+    Cmds[0] = "print cureent directory"; 
+    Cmds[1] = "remove directory"; 
+    Cmds[2] = "create directory"; 
+   Cmds[3] = "cd";
+    Cmds[4] = "history";
+  Cmds[5] = "exit";
+    for (i = 0; i < NoOfOwnCmds; i++) { 
+        if (strcmp(parsed[0], Cmds[i]) == 0) { 
+            a = i + 1; 
+            break; 
+        } 
+    } 
+  
+    switch (a) { 
+    case 1: 
+        printDirectory(); 
+        exit(0); 
+    case 2: 
+        rmdir(parsed[1]); 
+        return 1; 
+    case 3: 
+        mkdir(parsed[1]); 
+        return 1; 
+     case 4: 
+        chdir(parsed[1]); 
+        return 1; 
+
+    case 5: 
+        printf("history is :");
+        history(parsed[1]);
+    case 6: 
+        printf("exited") ;
+        exit(0);     
+    default: 
+        break;  } 
+  return 0; } 
+  // function for parsing command words 
+void parseSpace(char* str, char** parsed) 
+{ 
+    int i; 
+    for (i = 0; i < MAXLIST; i++) { 
+        parsed[i] = strsep(&str, " "); 
+  if (parsed[i] == NULL) 
+            break; 
+        if (strlen(parsed[i]) == 0) 
+            i--; 
+    } 
+} 
+  
+int main() 
+{ 
+    char String[MAXCOM], *Args[MAXLIST]; 
+    simplesh(); 
+   while (1) 
+	{ 
+        // print shell line 
+        printDirectory(); 
+        // take input 
+        if (Input(String)) 
+            continue; 
+        execute(Args);  } 
+    return 0; 
+} 
