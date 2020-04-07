@@ -20,7 +20,8 @@
     printf("\n\n\n user is: @%s", username); 
     printf("\n"); 
     sleep(1); 
-    clear();} 
+    clear();
+    } 
 // Function to take input 
 int Input(char* str) 
 {  char* buf; 
