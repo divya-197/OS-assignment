@@ -23,6 +23,7 @@
     sleep(1); 
     clear();
     } 
+
 // Function to take input 
 int Input(char* str) 
 {  char* buf; 
@@ -38,6 +39,7 @@ return 1;
   } 
 } 
   
+
 // Function to print Current Directory. 
 void printDirectory() 
 { 
@@ -109,7 +111,8 @@ int builtincmd(char** parsed)
     default: 
         break;  } 
   return 0; } 
-  // function for parsing command words 
+ 
+ // function for parsing command words 
 void parseSpace(char* str, char** parsed) 
 { 
     int i; 
